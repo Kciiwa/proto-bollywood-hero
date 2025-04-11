@@ -24,6 +24,7 @@ const SignInScreen = () => {
       onSubmit={(values) => {
         // Здесь ты можешь отправить данные на сервер
         console.log("Данные формы:", values);
+        navigation.navigate("UserForm");
       }}
     >
       {({
@@ -82,10 +83,7 @@ const SignInScreen = () => {
               <Text style={styles.error}>{errors.password}</Text>
             )}
 
-            <TouchableOpacity
-              style={styles.button}
-              onPress={() => console.log("Авторизация")}
-            >
+            <TouchableOpacity style={styles.button} onPress={handleSubmit}>
               <Text style={styles.buttonText}>Войти</Text>
             </TouchableOpacity>
 
