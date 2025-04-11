@@ -1,15 +1,11 @@
 import { StatusBar } from "expo-status-bar";
 import { StyleSheet, Text, View } from "react-native";
-import UserFormScreen from "./form";
+// import UserFormScreen from "./form";
+import SignInForm from "./signInScreen";
+import AppNavigator from "./AppNavigator";
 
 export default function App() {
-  return (
-    <View style={styles.container}>
-      {/* <Text>Open up App.js to start working on your app!</Text> */}
-      <UserFormScreen />
-      <StatusBar style="auto" />
-    </View>
-  );
+  return <AppNavigator />;
 }
 
 const styles = StyleSheet.create({
