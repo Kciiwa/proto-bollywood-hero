@@ -24,15 +24,13 @@ export const styles = StyleSheet.create({
     height: 96,
     marginBottom: 64,
   },
-  buttonSignWith: {
-    marginBottom: 12,
-  },
-  forgotPassword: {
-    marginTop: 16,
-    color: "#fff",
-    textDecorationLine: "underline",
-    fontSize: 16,
-    alignSelf: "flex-end",
+  button: {
+    width: "100%",
+    height: 50,
+    backgroundColor: "rgb(29, 29, 29)",
+    justifyContent: "center",
+    alignItems: "center",
+    borderRadius: 10,
   },
   createAccountContainer: {
     marginTop: 16,
@@ -43,16 +41,9 @@ export const styles = StyleSheet.create({
     fontSize: 16,
   },
   createAccount: {
+    color: "#000",
     textDecorationLine: "underline",
     fontSize: 16,
     marginBottom: -5,
-  },
-  buttonSubmit: {
-    marginTop: 16,
-  },
-  textOr: {
-    fontFamily: "Inter",
-    fontSize: 14,
-    marginBottom: 12,
   },
 });

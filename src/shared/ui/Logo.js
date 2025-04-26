@@ -7,7 +7,7 @@ export const Logo = () => {
       width="290"
       height="96"
       // eslint-disable-next-line no-undef
-      source={require("../../assets/Bollywood Hero.svg")}
+      source={require("../../assets/logo1.svg")}
     />
   );
 };

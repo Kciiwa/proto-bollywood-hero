@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { TextInput, Text, StyleSheet, View } from "react-native";
 import PropTypes from "prop-types";
 
@@ -12,14 +12,53 @@ const InputField = ({
   secureTextEntry,
   keyboardType,
 }) => {
+  const [isFocused, setIsFocused] = useState(false);
+
+  const getBorderColor = () => {
+    if (touched && error) {
+      return "rgba(227, 0, 0, 1)"; // Красная граница при ошибке
+    } else if (isFocused) {
+      return "rgba(17, 17, 19, 0.9)"; // Жёлтая граница при фокусе
+    } else {
+      return "rgba(17, 17, 19, 0.2)"; // Обычная серая
+    }
+  };
+
+  const getBackgroundColor = () => {
+    if (touched && error) {
+      return "rgba(227, 0, 0, 0.1)"; // Лёгкая красная заливка при ошибке
+    } else {
+      return "transparent"; // Прозрачный фон в норме
+    }
+  };
+
+  const getTextColor = () => {
+    if (touched && error) {
+      return "rgba(227, 0, 0, 1)"; // Красный текст при ошибке
+    } else {
+      return "rgba(29, 29, 29, 0.66)"; // Обычный тёмно-серый текст
+    }
+  };
+
   return (
     <View style={styles.inputContainer}>
       <TextInput
-        style={styles.input}
+        style={[
+          styles.input,
+          {
+            borderColor: getBorderColor(),
+            backgroundColor: getBackgroundColor(),
+            color: getTextColor(),
+          },
+        ]}
         placeholder={placeholder}
         placeholderTextColor={"rgba(45,45,45,0.66)"}
         onChangeText={onChangeText}
-        onBlur={onBlur}
+        onBlur={(e) => {
+          setIsFocused(false);
+          onBlur(e);
+        }}
+        onFocus={() => setIsFocused(true)}
         value={value}
         secureTextEntry={secureTextEntry}
         keyboardType={keyboardType}
@@ -43,23 +82,20 @@ InputField.propTypes = {
 const styles = StyleSheet.create({
   inputContainer: {
     width: "100%",
-    marginBottom: 16,
+    marginBottom: 12,
   },
   input: {
     width: "100%",
     height: 50,
-    borderColor: "#fff",
-    borderWidth: 2,
-    borderRadius: 10,
+    borderWidth: 1,
+    borderRadius: 4,
     paddingHorizontal: 15,
-    backgroundColor: "rgba(255, 255, 255, 0.5)",
-    color: "rgba(29, 29, 29, 0.66)",
   },
   error: {
-    color: "white",
+    color: "red",
     fontSize: 14,
     marginTop: 5,
-    marginBottom: 10,
+    // marginBottom: 10,
     alignSelf: "flex-start",
   },
 });
