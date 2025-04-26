@@ -28,7 +28,7 @@ const SongScreen = ({ route }) => {
   useEffect(() => {
     return sound
       ? () => {
-          sound.unloadAsync(); // 🧹 Очистка при выходе
+          sound.unloadAsync(); // Очистка при выходе, return в этом хуке всегда для отчистки от побочек
         }
       : undefined;
   }, [sound]);
@@ -57,7 +57,6 @@ const SongScreen = ({ route }) => {
   );
 };
 
-// Добавляем валидацию пропсов
 SongScreen.propTypes = {
   route: PropTypes.shape({
     params: PropTypes.shape({
