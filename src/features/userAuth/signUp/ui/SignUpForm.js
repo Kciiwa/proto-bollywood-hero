@@ -1,28 +1,22 @@
 import React from "react";
 import { LinearGradient } from "expo-linear-gradient";
-import {
-  StyleSheet,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  View,
-  ImageBackground,
-} from "react-native";
+import { StyleSheet, Text, View } from "react-native";
 import SvgUri from "react-native-svg-uri";
 import { Formik } from "formik";
-import * as Yup from "yup";
 import { useNavigation } from "@react-navigation/native";
+import InputField from "../../../../shared/components/InputField";
+import Button from "../../../../shared/components/Button";
+import { validationSchema } from "../model/validation";
+import PropTypes from "prop-types";
 
-const SignUpScreen = () => {
+const SignUpForm = ({ onSubmit }) => {
   const navigation = useNavigation();
 
   return (
     <Formik
       initialValues={{ name: "", email: "", password: "", confirmPassword: "" }}
       validationSchema={validationSchema}
-      onSubmit={(values) => {
-        console.log("Данные формы:", values);
-      }}
+      onSubmit={onSubmit}
     >
       {({
         handleChange,
@@ -32,7 +26,7 @@ const SignUpScreen = () => {
         errors,
         touched,
       }) => (
-        <ImageBackground style={styles.background}>
+        <View style={styles.background}>
           <LinearGradient
             colors={[
               "rgba(255, 0, 72, 0.8)",
@@ -47,78 +41,72 @@ const SignUpScreen = () => {
               <SvgUri
                 width="290"
                 height="96"
-                source={require("./assets/Bollywood Hero.svg")}
+                // eslint-disable-next-line no-undef
+                source={require("../../../../assets/Bollywood Hero.svg")}
               />
             </View>
 
-            <TextInput
-              style={styles.input}
+            <InputField
               placeholder="Введите имя"
-              placeholderTextColor={"rgba(45,45,45,0.66)"}
+              value={values.name}
               onChangeText={handleChange("name")}
               onBlur={handleBlur("name")}
-              value={values.name}
+              error={errors.name}
+              touched={touched.name}
             />
-            {touched.name && errors.name && (
-              <Text style={styles.error}>{errors.name}</Text>
-            )}
 
-            <TextInput
-              style={styles.input}
+            <InputField
               placeholder="Введите email"
-              placeholderTextColor={"rgba(45,45,45,0.66)"}
+              value={values.email}
               onChangeText={handleChange("email")}
               onBlur={handleBlur("email")}
-              value={values.email}
+              error={errors.email}
+              touched={touched.email}
               keyboardType="email-address"
             />
-            {touched.email && errors.email && (
-              <Text style={styles.error}>{errors.email}</Text>
-            )}
 
-            <TextInput
-              style={styles.input}
+            <InputField
               placeholder="Введите пароль"
-              placeholderTextColor={"rgba(45,45,45,0.66)"}
+              value={values.password}
               onChangeText={handleChange("password")}
               onBlur={handleBlur("password")}
-              value={values.password}
+              error={errors.password}
+              touched={touched.password}
               secureTextEntry
             />
-            {touched.password && errors.password && (
-              <Text style={styles.error}>{errors.password}</Text>
-            )}
 
-            <TextInput
-              style={styles.input}
+            <InputField
               placeholder="Подтвердите пароль"
-              placeholderTextColor={"rgba(45,45,45,0.66)"}
+              value={values.confirmPassword}
               onChangeText={handleChange("confirmPassword")}
               onBlur={handleBlur("confirmPassword")}
-              value={values.confirmPassword}
+              error={errors.confirmPassword}
+              touched={touched.confirmPassword}
               secureTextEntry
             />
-            {touched.confirmPassword && errors.confirmPassword && (
-              <Text style={styles.error}>{errors.confirmPassword}</Text>
-            )}
 
-            <TouchableOpacity style={styles.button} onPress={handleSubmit}>
-              <Text style={styles.buttonText}>Зарегистрироваться</Text>
-            </TouchableOpacity>
+            <Button onPress={handleSubmit} text="Зарегистрироваться" />
 
             <View style={styles.createAccountContainer}>
               <Text style={styles.createAccountText}>
                 Уже есть аккаунт?{" "}
-                <TouchableOpacity onPress={() => navigation.navigate("SignIn")}>
-                  <Text style={styles.createAccount}>Войти</Text>
-                </TouchableOpacity>
+                <Text
+                  style={styles.createAccount}
+                  onPress={() => navigation.navigate("SignIn")}
+                >
+                  Войти
+                </Text>
               </Text>
             </View>
           </LinearGradient>
-        </ImageBackground>
+        </View>
       )}
     </Formik>
   );
+};
+
+SignUpForm.propTypes = {
+  onSubmit: PropTypes.func.isRequired,
 };
 
 const styles = StyleSheet.create({
@@ -144,17 +132,6 @@ const styles = StyleSheet.create({
     width: 290,
     height: 96,
     marginBottom: 64,
-  },
-  input: {
-    width: "100%",
-    height: 50,
-    borderColor: "#fff",
-    borderWidth: 2,
-    borderRadius: 10,
-    marginBottom: 16,
-    paddingHorizontal: 15,
-    backgroundColor: "rgba(255, 255, 255, 0.5)",
-    color: "rgba(29, 29, 29, 0.66)",
   },
   button: {
     width: "100%",
@@ -184,17 +161,4 @@ const styles = StyleSheet.create({
   },
 });
 
-const validationSchema = Yup.object().shape({
-  name: Yup.string().required("Имя обязательно"),
-  email: Yup.string()
-    .email("Введите корректный email")
-    .required("Email обязателен"),
-  password: Yup.string()
-    .min(6, "Минимум 6 символов")
-    .required("Пароль обязателен"),
-  confirmPassword: Yup.string()
-    .oneOf([Yup.ref("password"), null], "Пароли должны совпадать")
-    .required("Подтверждение пароля обязательно"),
-});
-
-export default SignUpScreen;
+export default SignUpForm;
