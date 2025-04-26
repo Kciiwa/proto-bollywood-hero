@@ -10,7 +10,7 @@ import {
   ActivityIndicator,
 } from "react-native";
 import { Picker } from "@react-native-picker/picker";
-import { useNavigation } from "@react-navigation/native"; // 👈 добавлено
+import { useNavigation } from "@react-navigation/native";
 import image from "../../assets/i.webp";
 
 const UserFormScreen = () => {
@@ -49,7 +49,6 @@ const UserFormScreen = () => {
   return (
     <ImageBackground source={image} style={styles.container}>
       <ScrollView style={styles.scrollContainer}>
-        {/* Если загрузка активна, отображаем лоадер */}
         {loading ? (
           <View style={styles.loaderContainer}>
             <ActivityIndicator size="large" color="#FFD700" />
