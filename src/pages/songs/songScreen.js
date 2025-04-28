@@ -1,58 +1,77 @@
-import React, { useEffect, useState } from "react";
-import { View, Text, StyleSheet, Button } from "react-native";
+/* eslint-disable no-undef */
+
+import React, { useState, useEffect, useRef } from "react";
+import { View, StyleSheet } from "react-native";
 import { Audio } from "expo-av";
 import PropTypes from "prop-types";
+import CoverImage from "../../shared/components/CoverImage";
+import SongTitle from "../../shared/components/SongTitle";
+import Timeline from "../../shared/components/Timeline";
+import AudioControlButtons from "../../shared/components/AudioControlButtons";
 
 const SongScreen = ({ route }) => {
-  const { userData } = route.params;
+  const { songData } = route.params;
   const [sound, setSound] = useState();
   const [isPlaying, setIsPlaying] = useState(false);
+  const [currentPosition, setCurrentPosition] = useState(0);
+  const progressRef = useRef(0);
 
   async function playSound() {
     const { sound } = await Audio.Sound.createAsync(
-      // eslint-disable-next-line no-undef
-      require("../../assets/audio/🎵 Title_ “Rahul the Rising Star”.mp3")
+      require("../../assets/audio/🎵 Title_ “Rahul the Rising Star”.mp3"),
+      { positionMillis: currentPosition * 1000 }
     );
     setSound(sound);
     setIsPlaying(true);
     await sound.playAsync();
+
+    sound.setOnPlaybackStatusUpdate((status) => {
+      if (status.isLoaded) {
+        const position = status.positionMillis / status.durationMillis;
+        progressRef.current = position;
+        setCurrentPosition(position);
+      }
+    });
   }
 
   async function stopSound() {
     if (sound) {
       await sound.stopAsync();
       setIsPlaying(false);
+      setCurrentPosition(progressRef.current);
     }
   }
 
+  const handleSeek = async (newProgress) => {
+    if (sound) {
+      const status = await sound.getStatusAsync();
+      const positionMillis = newProgress * status.durationMillis;
+      await sound.setPositionAsync(positionMillis);
+      setCurrentPosition(newProgress);
+    }
+  };
+
   useEffect(() => {
-    return sound
-      ? () => {
-          sound.unloadAsync(); // Очистка при выходе, return в этом хуке всегда для отчистки от побочек
-        }
-      : undefined;
+    return sound ? () => sound.unloadAsync() : undefined;
   }, [sound]);
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>🎵 Ваша песня почти готова!</Text>
-      <Text style={styles.text}>Вот данные, которые мы получили:</Text>
-      <Text style={styles.text}>Имя: {userData.name}</Text>
-      <Text style={styles.text}>Дата рождения: {userData.birthdate}</Text>
-      <Text style={styles.text}>Пол: {userData.gender}</Text>
-      <Text style={styles.text}>Рост: {userData.height} см</Text>
-      <Text style={styles.text}>Вес: {userData.weight} кг</Text>
-      <Text style={styles.text}>Город: {userData.city}</Text>
-      <Text style={styles.text}>Описание: {userData.description}</Text>
-      <Text style={styles.text}>🎶 Послушайте свою песню ниже:</Text>
-
-      <View style={styles.audioControls}>
-        {!isPlaying ? (
-          <Button title="▶️ Воспроизвести песню" onPress={playSound} />
-        ) : (
-          <Button title="⏹️ Остановить" onPress={stopSound} />
-        )}
-      </View>
+      <CoverImage imageUrl={songData.imageUrl} />
+      <SongTitle title={songData.title} />
+      <Timeline
+        onValueChange={(newProgress) => {
+          progressRef.current = newProgress;
+        }}
+        onSlidingComplete={handleSeek}
+        value={currentPosition}
+      />
+      <AudioControlButtons
+        isPlaying={isPlaying}
+        onPlayPause={isPlaying ? stopSound : playSound}
+        onShare={() => alert("Поделиться песней")}
+        onSave={() => alert("Сохранить песню")}
+      />
     </View>
   );
 };
@@ -60,14 +79,9 @@ const SongScreen = ({ route }) => {
 SongScreen.propTypes = {
   route: PropTypes.shape({
     params: PropTypes.shape({
-      userData: PropTypes.shape({
-        name: PropTypes.string.isRequired,
-        birthdate: PropTypes.string.isRequired,
-        gender: PropTypes.string.isRequired,
-        height: PropTypes.number.isRequired,
-        weight: PropTypes.number.isRequired,
-        city: PropTypes.string.isRequired,
-        description: PropTypes.string.isRequired,
+      songData: PropTypes.shape({
+        title: PropTypes.string.isRequired,
+        imageUrl: PropTypes.string.isRequired,
       }).isRequired,
     }).isRequired,
   }).isRequired,
@@ -79,19 +93,6 @@ const styles = StyleSheet.create({
     padding: 20,
     justifyContent: "center",
     backgroundColor: "#fff",
-  },
-  title: {
-    fontSize: 24,
-    fontWeight: "bold",
-    color: "#e91e63",
-    marginBottom: 20,
-  },
-  text: {
-    fontSize: 18,
-    marginBottom: 10,
-  },
-  audioControls: {
-    marginTop: 30,
   },
 });
 

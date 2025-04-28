@@ -1,141 +1,171 @@
+/* eslint-disable no-undef */
 import React, { useState } from "react";
 import {
   View,
   Text,
-  TextInput,
-  Button,
   StyleSheet,
   ScrollView,
-  ImageBackground,
   ActivityIndicator,
 } from "react-native";
-import { Picker } from "@react-native-picker/picker";
 import { useNavigation } from "@react-navigation/native";
-import image from "../../assets/i.webp";
+import { Formik } from "formik";
+import * as Yup from "yup";
+import InputField from "../../shared/components/InputField";
+import DateInputField from "../../shared/components/DateInputField";
+import RadioGroup from "../../shared/components/RadioButton"; // Ваш компонент RadioGroup
+import Button from "../../shared/components/Button";
+import { Image } from "react-native";
+
+const validationSchema = Yup.object().shape({
+  name: Yup.string().required("Имя обязательно"),
+  birthdate: Yup.string().required("Дата рождения обязательна"),
+  gender: Yup.string().required("Пол обязателен"),
+  height: Yup.string().required("Рост обязателен"),
+  weight: Yup.string().required("Вес обязателен"),
+  city: Yup.string().required("Город обязателен"),
+  description: Yup.string().required("Описание обязательно"),
+});
 
 const UserFormScreen = () => {
   const navigation = useNavigation();
-
   const [loading, setLoading] = useState(false);
 
-  const [name, setName] = useState("");
-  const [birthdate, setBirthdate] = useState("");
-  const [gender, setGender] = useState("М");
-  const [height, setHeight] = useState("");
-  const [weight, setWeight] = useState("");
-  const [city, setCity] = useState("");
-  const [description, setDescription] = useState("");
+  const initialValues = {
+    name: "",
+    birthdate: "",
+    gender: "М", // По умолчанию выбран мужской пол
+    height: "",
+    weight: "",
+    city: "",
+    description: "",
+  };
 
-  const handleSubmit = () => {
+  const handleSubmit = (values) => {
     setLoading(true);
-    const userData = {
-      name,
-      birthdate,
-      gender,
-      height,
-      weight,
-      city,
-      description,
-    };
 
     setTimeout(() => {
       setLoading(false);
-      navigation.navigate("Song", { userData });
-    }, 3000); // 3 секунды
+      navigation.navigate("Song", {
+        userData: values,
+        songData: {
+          title: "Rahul the Rising Star",
+          imageUrl: Image.resolveAssetSource(
+            require("../../assets/musicIcon.jpg")
+          ).uri,
+        },
+      });
+    }, 3000);
 
-    console.log("Данные формы:", userData);
+    console.log("Данные формы:", values);
   };
 
   return (
-    <ImageBackground source={image} style={styles.container}>
-      <ScrollView style={styles.scrollContainer}>
-        {loading ? (
-          <View style={styles.loaderContainer}>
-            <ActivityIndicator size="large" color="#FFD700" />
-            <Text style={styles.loaderText}>🎤 Генерация песни...</Text>
-          </View>
-        ) : (
-          <View style={styles.form}>
-            <Text style={styles.title}>🌟 Болливудская Песня О Тебе! 🌟</Text>
+    <ScrollView style={styles.scrollContainer}>
+      {loading ? (
+        <View style={styles.loaderContainer}>
+          <ActivityIndicator size="large" color="#FFD700" />
+          <Text style={styles.loaderText}>🎤 Генерация песни...</Text>
+        </View>
+      ) : (
+        <Formik
+          initialValues={initialValues}
+          validationSchema={validationSchema}
+          onSubmit={handleSubmit}
+        >
+          {({
+            handleChange,
+            handleBlur,
+            handleSubmit,
+            values,
+            errors,
+            touched,
+            setFieldValue,
+          }) => (
+            <View style={styles.form}>
+              <Text style={styles.title}>🌟 Песня о тебе! 🌟</Text>
 
-            <Text style={styles.label}>Имя</Text>
-            <TextInput
-              style={styles.input}
-              value={name}
-              onChangeText={setName}
-              placeholder="Введите ваше имя"
-              placeholderTextColor="#8B0000"
-            />
+              <Text style={styles.label}>Имя</Text>
+              <InputField
+                placeholder="Введите ваше имя"
+                value={values.name}
+                onChangeText={handleChange("name")}
+                onBlur={handleBlur("name")}
+                error={errors.name}
+                touched={touched.name}
+              />
 
-            <Text style={styles.label}>Дата рождения</Text>
-            <TextInput
-              style={styles.input}
-              value={birthdate}
-              onChangeText={setBirthdate}
-              placeholder="Введите вашу дату рождения"
-              placeholderTextColor="#8B0000"
-              keyboardType="numeric"
-            />
+              <Text style={styles.label}>Дата рождения</Text>
 
-            <Text style={styles.label}>Пол</Text>
-            <Picker
-              selectedValue={gender}
-              style={styles.picker}
-              onValueChange={(itemValue) => setGender(itemValue)}
-            >
-              <Picker.Item label="Мужской" value="М" />
-              <Picker.Item label="Женский" value="Ж" />
-              <Picker.Item label="Другое" value="другое" />
-            </Picker>
+              <DateInputField
+                placeholder="Введите вашу дату рождения"
+                value={values.birthdate}
+                onChange={handleChange("birthdate")}
+                touched={touched.birthdate}
+                error={errors.birthdate}
+              />
 
-            <Text style={styles.label}>Рост (в см)</Text>
-            <TextInput
-              style={styles.input}
-              value={height}
-              onChangeText={setHeight}
-              placeholder="Введите ваш рост"
-              placeholderTextColor="#8B0000"
-              keyboardType="numeric"
-            />
+              <Text style={styles.label}>Пол</Text>
+              <View style={styles.radioWrapper}>
+                <RadioGroup
+                  options={[
+                    { label: "Мужской", value: "М" },
+                    { label: "Женский", value: "Ж" },
+                    { label: "Это секрет", value: "секрет" },
+                  ]}
+                  selectedValue={values.gender}
+                  onSelect={(value) => setFieldValue("gender", value)}
+                />
+              </View>
 
-            <Text style={styles.label}>Вес (в кг)</Text>
-            <TextInput
-              style={styles.input}
-              value={weight}
-              onChangeText={setWeight}
-              placeholder="Введите ваш вес"
-              placeholderTextColor="#8B0000"
-              keyboardType="numeric"
-            />
+              <Text style={styles.label}>Рост (в см)</Text>
+              <InputField
+                placeholder="Введите ваш рост"
+                value={values.height}
+                onChangeText={handleChange("height")}
+                onBlur={handleBlur("height")}
+                error={errors.height}
+                touched={touched.height}
+                keyboardType="numeric"
+              />
 
-            <Text style={styles.label}>Город рождения</Text>
-            <TextInput
-              style={styles.input}
-              value={city}
-              onChangeText={setCity}
-              placeholder="Введите ваш город рождения"
-              placeholderTextColor="#8B0000"
-            />
+              <Text style={styles.label}>Вес (в кг)</Text>
+              <InputField
+                placeholder="Введите ваш вес"
+                value={values.weight}
+                onChangeText={handleChange("weight")}
+                onBlur={handleBlur("weight")}
+                error={errors.weight}
+                touched={touched.weight}
+                keyboardType="numeric"
+              />
 
-            <Text style={styles.label}>Опишите себя</Text>
-            <TextInput
-              style={[styles.input, styles.textArea]}
-              value={description}
-              onChangeText={setDescription}
-              placeholder="Напишите пару слов о себе"
-              placeholderTextColor="#8B0000"
-              multiline
-            />
+              <Text style={styles.label}>Город рождения</Text>
+              <InputField
+                placeholder="Введите ваш город рождения"
+                value={values.city}
+                onChangeText={handleChange("city")}
+                onBlur={handleBlur("city")}
+                error={errors.city}
+                touched={touched.city}
+              />
 
-            <Button
-              title="Генерировать песню"
-              onPress={handleSubmit}
-              color="#FFD700"
-            />
-          </View>
-        )}
-      </ScrollView>
-    </ImageBackground>
+              <Text style={styles.label}>Опишите себя</Text>
+              <InputField
+                placeholder="Напишите пару слов о себе"
+                value={values.description}
+                onChangeText={handleChange("description")}
+                onBlur={handleBlur("description")}
+                error={errors.description}
+                touched={touched.description}
+                multiline={true}
+              />
+
+              <Button onPress={handleSubmit} text="Generate" color="black" />
+            </View>
+          )}
+        </Formik>
+      )}
+    </ScrollView>
   );
 };
 
@@ -175,32 +205,11 @@ const styles = StyleSheet.create({
   label: {
     fontSize: 16,
     fontWeight: "600",
-    color: "#8B0000",
+    color: "rgba(17, 17, 19, 0.9)",
     marginBottom: 5,
   },
-  input: {
-    height: 45,
-    borderColor: "#FFD700",
-    borderWidth: 2,
-    borderRadius: 10,
+  radioWrapper: {
     marginBottom: 15,
-    paddingLeft: 10,
-    backgroundColor: "white",
-    fontSize: 16,
-    color: "#333",
-    fontFamily: "Indie Flower",
-  },
-  picker: {
-    height: 50,
-    borderWidth: 2,
-    borderRadius: 10,
-    marginBottom: 15,
-    borderColor: "#FFD700",
-    backgroundColor: "white",
-  },
-  textArea: {
-    height: 100,
-    textAlignVertical: "top",
   },
 });
 
