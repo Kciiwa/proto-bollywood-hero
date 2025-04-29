@@ -7,21 +7,27 @@
     "start": "expo start",
     "android": "expo start --android",
     "ios": "expo start --ios",
-    "web": "expo start --web"
+    "web": "expo start --web",
+    "lint": "eslint . --ext .js,.jsx,.mjs,.cjs"
   },
   "dependencies": {
+    "@react-native-community/checkbox": "^0.5.17",
+    "@react-native-community/datetimepicker": "8.2.0",
+    "@react-native-community/slider": "^4.5.6",
     "@react-native-picker/picker": "^2.11.0",
     "@react-navigation/native": "^7.1.6",
     "@react-navigation/stack": "^7.2.10",
     "expo": "~52.0.43",
     "expo-av": "^15.0.2",
-    "expo-linear-gradient": "~14.0.2",
+    "expo-checkbox": "^4.0.1",
+    "expo-linear-gradient": "^14.0.2",
     "expo-status-bar": "~2.0.1",
     "formik": "^2.4.6",
     "prop-types": "^15.8.1",
     "react": "18.3.1",
     "react-native": "0.76.9",
     "react-native-gesture-handler": "^2.25.0",
+    "react-native-image-colors": "^2.4.0",
     "react-native-linear-gradient": "^2.8.3",
     "react-native-safe-area-context": "^5.3.0",
     "react-native-screens": "^4.10.0",
@@ -30,7 +36,12 @@
     "yup": "^1.6.1"
   },
   "devDependencies": {
-    "@babel/core": "^7.20.0"
+    "@babel/core": "^7.20.0",
+    "@eslint/js": "^9.25.1",
+    "eslint": "^9.25.1",
+    "eslint-plugin-react": "^7.37.5",
+    "eslint-plugin-react-native": "^5.0.0",
+    "globals": "^16.0.0"
   },
   "private": true
 }
