@@ -15,6 +15,7 @@ import DateInputField from "../../shared/components/DateInputField";
 import RadioGroup from "../../shared/components/RadioButton"; // Ваш компонент RadioGroup
 import Button from "../../shared/components/Button";
 import { Image } from "react-native";
+import { sendBirthData } from '../../shared/api/astroApi';
 
 const validationSchema = Yup.object().shape({
   name: Yup.string().required("Имя обязательно"),
@@ -40,13 +41,33 @@ const UserFormScreen = () => {
     description: "",
   };
 
-  const handleSubmit = (values) => {
+  const handleSubmit = async (values) => {
     setLoading(true);
-
-    setTimeout(() => {
-      setLoading(false);
+  
+    try {
+      const { name, birthdate, city } = values;
+  
+      // Пока временно — заглушка на время и координаты
+      const time = "09:00";
+      const lat = 55.751244;
+      const lon = 37.618423;
+  
+      // 🔮 Получаем натальную карту
+      const natalChart = await sendBirthData({
+        name,
+        date: birthdate,
+        time,
+        lat,
+        lon,
+      });
+  
+      console.log("🧠 Натальная карта:", natalChart);
+      console.log("📝 Данные формы:", values);
+  
+      // Переход на экран с объединёнными данными
       navigation.navigate("Song", {
         userData: values,
+        natalChart: natalChart, // 🔗 прикрепляем к payload
         songData: {
           title: "Rahul the Rising Star",
           imageUrl: Image.resolveAssetSource(
@@ -54,9 +75,11 @@ const UserFormScreen = () => {
           ).uri,
         },
       });
-    }, 3000);
-
-    console.log("Данные формы:", values);
+    } catch (error) {
+      console.error("Ошибка при получении натальной карты:", error);
+    }
+  
+    setLoading(false);
   };
 
   return (
