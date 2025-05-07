@@ -9,6 +9,7 @@ import {
   StyleSheet,
 } from "react-native";
 import Icon from "react-native-vector-icons/Feather";
+import Ionicons from "react-native-vector-icons/Ionicons";
 
 const HomeScreen = ({ navigation }) => {
   return (
@@ -46,7 +47,13 @@ const HomeScreen = ({ navigation }) => {
       {/* Feature Cards */}
       <View style={styles.cardGrid}>
         <View style={styles.card}>
-          <Icon name="wand" size={32} color="#FF9800" style={styles.cardIcon} />
+          {/* <Icon name="wand" size={32} color="#FF9800" style={styles.cardIcon} /> */}
+          <Ionicons
+            name="color-wand"
+            size={24}
+            color="#FF9800"
+            style={styles.cardIcon}
+          />
           <Text style={styles.cardTitle}>AI-Powered</Text>
           <Text style={styles.cardText}>
             Create unique songs using advanced AI technology
