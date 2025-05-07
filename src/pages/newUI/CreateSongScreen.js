@@ -1,7 +1,8 @@
 import React from "react";
+import { Text } from "react-native";
 
 function CreateSongScreen() {
-  return <text> CreateSongScreen </text>;
+  return <Text>CreateSongScreen </Text>;
 }
 
 export default CreateSongScreen;
