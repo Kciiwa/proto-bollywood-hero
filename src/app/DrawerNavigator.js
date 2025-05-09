@@ -100,7 +100,7 @@ import { TouchableOpacity } from "react-native";
 
 import HomeScreen from "../pages/newUI/HomeScreen";
 import LibraryScreen from "../pages/newUI/LibraryScreen";
-import CreateSongScreen from "../pages/newUI/CreateSongScreen";
+import CreateSongScreen from "../pages/newUI/createSongScreen/CreateSongScreen";
 import ContactScreen from "../pages/newUI/ContactScreen";
 
 const Drawer = createDrawerNavigator();
@@ -151,7 +151,7 @@ const DrawerNavigator = () => {
       <Drawer.Screen
         name="Library"
         component={LibraryScreen}
-        options={{
+        options={({ navigation }) => ({
           drawerIcon: ({ color, size }) => (
             <Ionicons name="library-outline" size={size} color={color} />
           ),
@@ -167,12 +167,12 @@ const DrawerNavigator = () => {
               />
             </TouchableOpacity>
           ),
-        }}
+        })}
       />
       <Drawer.Screen
-        name="Create"
+        name="CreateSongScreen"
         component={CreateSongScreen}
-        options={{
+        options={({ navigation }) => ({
           title: "Create Song",
           drawerIcon: ({ color, size }) => (
             <Ionicons name="musical-notes-outline" size={size} color={color} />
@@ -189,12 +189,12 @@ const DrawerNavigator = () => {
               />
             </TouchableOpacity>
           ),
-        }}
+        })}
       />
       <Drawer.Screen
         name="Contact"
         component={ContactScreen}
-        options={{
+        options={({ navigation }) => ({
           drawerIcon: ({ color, size }) => (
             <Ionicons name="call-outline" size={size} color={color} />
           ),
@@ -210,7 +210,7 @@ const DrawerNavigator = () => {
               />
             </TouchableOpacity>
           ),
-        }}
+        })}
       />
     </Drawer.Navigator>
   );

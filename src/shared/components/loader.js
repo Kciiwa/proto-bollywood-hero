@@ -1,0 +1,78 @@
+import React, { useEffect, useRef, useState } from "react";
+import { View, Animated, StyleSheet } from "react-native";
+import Icon from "react-native-vector-icons/MaterialCommunityIcons";
+
+const zodiacIcons = [
+  "zodiac-aries",
+  "zodiac-taurus",
+  "zodiac-gemini",
+  "zodiac-cancer",
+  "zodiac-leo",
+  "zodiac-virgo",
+  "zodiac-libra",
+  "zodiac-scorpio",
+  "zodiac-sagittarius",
+  "zodiac-capricorn",
+  "zodiac-aquarius",
+  "zodiac-pisces",
+];
+
+const cosmicColors = [
+  "#ff6ec7",
+  "#6eafff",
+  "#8e44ad",
+  "#00ffe7",
+  "#ff9a00",
+  "#bb00ff",
+];
+
+export default function ZodiacLoader() {
+  const [index, setIndex] = useState(0);
+  const [colorIndex, setColorIndex] = useState(0);
+  const fadeAnim = useRef(new Animated.Value(1)).current;
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      // 1. Плавно исчезаем
+      Animated.timing(fadeAnim, {
+        toValue: 0,
+        duration: 300,
+        useNativeDriver: true,
+      }).start(() => {
+        // 2. Меняем иконку и цвет только после того, как исчезли
+        setIndex((prev) => (prev + 1) % zodiacIcons.length);
+        setColorIndex((prev) => (prev + 1) % cosmicColors.length);
+
+        // 3. Плавно возвращаемся
+        Animated.timing(fadeAnim, {
+          toValue: 1,
+          duration: 300,
+          useNativeDriver: true,
+        }).start();
+      });
+    }, 1500); // чуть больше, чтобы дать глазу "вдох"
+
+    return () => clearInterval(interval);
+  }, []);
+
+  return (
+    <View style={styles.container}>
+      <Animated.View style={{ opacity: fadeAnim }}>
+        <Icon
+          name={zodiacIcons[index]}
+          size={70}
+          color={cosmicColors[colorIndex]}
+        />
+      </Animated.View>
+    </View>
+  );
+}
+
+const styles = StyleSheet.create({
+  container: {
+    width: 120,
+    height: 120,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+});
