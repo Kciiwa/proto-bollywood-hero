@@ -8,6 +8,7 @@ import {
   StyleSheet,
 } from "react-native";
 import Icon from "react-native-vector-icons/Feather";
+import ZodiacLoader from "../../shared/components/loader";
 
 const songs = [
   {
@@ -36,7 +37,9 @@ const songs = [
 const LibraryScreen = () => {
   return (
     <ScrollView contentContainerStyle={styles.container}>
+      <ZodiacLoader />
       <Text style={styles.header}>Your Song Library</Text>
+
       <View style={styles.grid}>
         {songs.map((song) => (
           <View key={song.id} style={styles.card}>
