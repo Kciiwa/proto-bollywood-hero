@@ -13,11 +13,33 @@ import Icon from "react-native-vector-icons/Feather";
 import GoogleIcon from "react-native-vector-icons/FontAwesome";
 import AppleIcon from "react-native-vector-icons/FontAwesome";
 import BouncyCheckbox from "react-native-bouncy-checkbox";
+import { signInWithEmailAndPassword } from "firebase/auth";
+import { auth } from "../../../firebase"; // путь поправь, если у тебя другой
+import { Alert } from "react-native";
+import { useNavigation } from "@react-navigation/native";
 
 function SignInScreen() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [rememberMe, setRememberMe] = useState(false);
+  const navigation = useNavigation();
+
+  const handleSignIn = async () => {
+    try {
+      const userCredential = await signInWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
+      const user = userCredential.user;
+      console.log("Вход выполнен:", user.email);
+      navigation.navigate("Main");
+      // Здесь можно сделать навигацию или переход в основное приложение
+    } catch (error) {
+      console.error("Ошибка входа:", error.message);
+      Alert.alert("Ошибка входа", error.message);
+    }
+  };
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
@@ -100,7 +122,10 @@ function SignInScreen() {
           </TouchableOpacity>
         </View>
 
-        <TouchableOpacity style={[styles.button, styles.primary]}>
+        <TouchableOpacity
+          style={[styles.button, styles.primary]}
+          onPress={handleSignIn}
+        >
           <Text style={styles.buttonText}>Sign in</Text>
         </TouchableOpacity>
 
@@ -110,7 +135,7 @@ function SignInScreen() {
             <Text
               style={styles.link}
               onPress={() => {
-                // Заменить на navigation.navigate('SignUp') при наличии навигации
+                navigation.navigate("SignUpScreen");
               }}
             >
               Create an account

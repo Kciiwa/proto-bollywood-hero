@@ -6,6 +6,27 @@ export const styles = StyleSheet.create({
     paddingBottom: 40,
     backgroundColor: "#FFF3E0",
   },
+
+  loaderContainer: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+
+  mockButton: {
+    backgroundColor: "rgb(221, 148, 250)",
+    padding: 12,
+    borderRadius: 8,
+    alignItems: "center",
+    marginVertical: 10,
+  },
+
+  mockButtonText: {
+    color: "white",
+    fontWeight: "bold",
+    fontSize: 16,
+  },
+
   card: {
     backgroundColor: "#FFF",
     borderRadius: 16,
