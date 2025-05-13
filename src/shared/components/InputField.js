@@ -73,8 +73,8 @@ const CustomInput = ({
           textAlignVertical={multiline ? "top" : "center"}
           onFocus={() => setIsFocused(true)}
           onBlur={(e) => {
-            setIsFocused(false); // убираем фокус
-            onBlur && onBlur(e); // пробрасываем blur дальше в Formik
+            setIsFocused(false);
+            onBlur && onBlur(e);
           }}
         />
       </View>

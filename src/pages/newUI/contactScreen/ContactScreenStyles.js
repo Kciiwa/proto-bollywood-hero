@@ -44,9 +44,6 @@ export const styles = StyleSheet.create({
     paddingVertical: 10,
     paddingTop: 30,
   },
-  textareaWrapper: {
-    // paddingTop: 30,
-  },
   icon: {
     marginRight: 8,
   },

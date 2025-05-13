@@ -33,24 +33,21 @@ export default function ZodiacLoader() {
 
   useEffect(() => {
     const interval = setInterval(() => {
-      // 1. Плавно исчезаем
       Animated.timing(fadeAnim, {
         toValue: 0,
         duration: 300,
         useNativeDriver: true,
       }).start(() => {
-        // 2. Меняем иконку и цвет только после того, как исчезли
         setIndex((prev) => (prev + 1) % zodiacIcons.length);
         setColorIndex((prev) => (prev + 1) % cosmicColors.length);
 
-        // 3. Плавно возвращаемся
         Animated.timing(fadeAnim, {
           toValue: 1,
           duration: 300,
           useNativeDriver: true,
         }).start();
       });
-    }, 1500); // чуть больше, чтобы дать глазу "вдох"
+    }, 1500);
 
     return () => clearInterval(interval);
   }, []);

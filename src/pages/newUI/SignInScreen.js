@@ -9,12 +9,11 @@ import {
   Linking,
 } from "react-native";
 import Icon from "react-native-vector-icons/Feather";
-// import MaterialIcon from "react-native-vector-icons/MaterialCommunityIcons";
 import GoogleIcon from "react-native-vector-icons/FontAwesome";
 import AppleIcon from "react-native-vector-icons/FontAwesome";
 import BouncyCheckbox from "react-native-bouncy-checkbox";
 import { signInWithEmailAndPassword } from "firebase/auth";
-import { auth } from "../../../firebase"; // путь поправь, если у тебя другой
+import { auth } from "../../../firebase";
 import { Alert } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 
@@ -34,7 +33,6 @@ function SignInScreen() {
       const user = userCredential.user;
       console.log("Вход выполнен:", user.email);
       navigation.navigate("Main");
-      // Здесь можно сделать навигацию или переход в основное приложение
     } catch (error) {
       console.error("Ошибка входа:", error.message);
       Alert.alert("Ошибка входа", error.message);
@@ -135,7 +133,7 @@ function SignInScreen() {
             <Text
               style={styles.link}
               onPress={() => {
-                navigation.navigate("SignUpScreen");
+                navigation.navigate("SignUp");
               }}
             >
               Create an account
@@ -244,14 +242,6 @@ const styles = StyleSheet.create({
     height: 64,
   },
   label: {
-    // fontSize: 14,
-    // marginBottom: 4,
-    // fontWeight: "500",
-    // display: "absolute",
-    // top: -4,
-    // left: 3,
-    // color: "#83838A",
-    // height: 15,
     position: "absolute",
     top: 8,
     left: 14,
@@ -260,19 +250,9 @@ const styles = StyleSheet.create({
     marginBottom: 6,
     color: "#83838A",
   },
-  input: {
-    // borderWidth: 1,
-    // borderColor: "#F4F4F5",
-    // borderRadius: 14,
-    // backgroundColor: "#F4F4F5",
-    // paddingBottom: 15,
-    // marginBottom: 12,
-    // height: 64,
-  },
   rememberRow: {
     flexDirection: "row",
     justifyContent: "flex-start",
-    // alignItems: "center",
     marginBottom: 16,
   },
   checkboxContainer: {
