@@ -73,9 +73,6 @@ const styles = StyleSheet.create({
     height: 64,
   },
   label: {
-    // marginBottom: 6,
-    // fontSize: 14,
-    // fontWeight: "600",
     position: "absolute",
     top: 8,
     left: 14,
@@ -85,11 +82,6 @@ const styles = StyleSheet.create({
     color: "#83838A",
   },
   dropdown: {
-    // borderWidth: 1,
-    // borderColor: "#F4F4F5",
-    // borderRadius: 14,
-    // padding: 12,
-    // paddingTop: 22,
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",

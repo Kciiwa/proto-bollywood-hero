@@ -8,7 +8,6 @@ import {
   StyleSheet,
 } from "react-native";
 import Icon from "react-native-vector-icons/Feather";
-// import ZodiacLoader from "../../shared/components/loader";
 
 const songs = [
   {
@@ -86,7 +85,6 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     marginBottom: 24,
     width: "100%",
-    // Для более точного отображения на 2–3 колонки можно использовать FlatList с numColumns
     shadowColor: "#000",
     shadowOpacity: 0.05,
     shadowOffset: { width: 0, height: 2 },
@@ -111,7 +109,7 @@ const styles = StyleSheet.create({
   },
   date: {
     fontSize: 12,
-    color: "#6B7280", // примерно соответствует text-default-500
+    color: "#6B7280",
     marginTop: 4,
   },
   iconButton: {

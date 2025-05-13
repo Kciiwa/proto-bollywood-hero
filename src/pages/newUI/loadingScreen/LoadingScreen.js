@@ -1,6 +1,6 @@
 import React from "react";
 import { View, StyleSheet, StatusBar } from "react-native";
-import ZodiacLoader from "../../../shared/components/loader"; // предполагается, что лоадер уже был создан в отдельном файле
+import ZodiacLoader from "../../../shared/components/loader";
 
 const LoadingScreen = () => {
   return (
@@ -16,7 +16,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "#F3F4F6", // или любой другой цвет фона
+    backgroundColor: "#F3F4F6",
   },
 });
 

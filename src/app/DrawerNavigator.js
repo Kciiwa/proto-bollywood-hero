@@ -7,7 +7,6 @@ import HomeScreen from "../pages/newUI/HomeScreen";
 import LibraryScreen from "../pages/newUI/LibraryScreen";
 import CreateSongScreen from "../pages/newUI/createSongScreen/CreateSongScreen";
 import ContactScreen from "../pages/newUI/contactScreen/ContactScreen";
-// import LoadingScreen from "../pages/newUI/loadingScreen/LoadingScreen";
 
 const Drawer = createDrawerNavigator();
 
@@ -117,27 +116,6 @@ const DrawerNavigator = () => {
           ),
         })}
       />
-      {/* <Drawer.Screen
-        name="Loading"
-        component={LoadingScreen}
-        options={({ navigation }) => ({
-          drawerIcon: ({ color, size }) => (
-            <Ionicons name="call-outline" size={size} color={color} />
-          ),
-          headerRight: () => (
-            <TouchableOpacity
-              onPress={() => navigation.navigate("SignInScreen")}
-            >
-              <Ionicons
-                name="person-outline"
-                size={30}
-                color="black"
-                style={{ marginRight: 15 }}
-              />
-            </TouchableOpacity>
-          ),
-        })}
-      /> */}
     </Drawer.Navigator>
   );
 };

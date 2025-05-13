@@ -6,7 +6,6 @@ import * as Yup from "yup";
 import { styles } from "./ContactScreenStyles";
 import CustomInput from "../../../shared/components/InputField";
 
-// Схема валидации через Yup
 const ContactSchema = Yup.object().shape({
   name: Yup.string().required("Name is required"),
   email: Yup.string().email("Invalid email").required("Email is required"),
@@ -24,7 +23,7 @@ function ContactScreen() {
           validationSchema={ContactSchema}
           onSubmit={(values, actions) => {
             console.log("Form submitted:", values);
-            actions.resetForm(); // очищаем форму после отправки
+            actions.resetForm();
           }}
         >
           {({
@@ -79,7 +78,6 @@ function ContactScreen() {
                 />
               </View>
 
-              {/* Submit Button */}
               <TouchableOpacity style={styles.button} onPress={handleSubmit}>
                 <Icon
                   name="send"
@@ -93,7 +91,6 @@ function ContactScreen() {
           )}
         </Formik>
 
-        {/* Contact Info Cards */}
         <View style={styles.cardGrid}>
           <View style={styles.infoCard}>
             <Icon name="mail" size={24} color="#FF9800" />

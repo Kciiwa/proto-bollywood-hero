@@ -14,7 +14,6 @@ import Ionicons from "react-native-vector-icons/Ionicons";
 const HomeScreen = ({ navigation }) => {
   return (
     <ScrollView contentContainerStyle={styles.container}>
-      {/* Hero Section */}
       <View style={styles.heroSection}>
         <Image
           source={{
@@ -44,10 +43,8 @@ const HomeScreen = ({ navigation }) => {
         </View>
       </View>
 
-      {/* Feature Cards */}
       <View style={styles.cardGrid}>
         <View style={styles.card}>
-          {/* <Icon name="wand" size={32} color="#FF9800" style={styles.cardIcon} /> */}
           <Ionicons
             name="color-wand"
             size={24}
@@ -141,11 +138,6 @@ const styles = StyleSheet.create({
     width: "100%",
     height: 400,
     borderRadius: 12,
-    // shadowColor: "#000",
-    // shadowOpacity: 0.1,
-    // shadowOffset: { width: 0, height: 4 },
-    // shadowRadius: 8,
-    // elevation: 3,
   },
   cardGrid: {
     flexDirection: "column",
