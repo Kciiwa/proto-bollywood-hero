@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { View, Text, ScrollView, TouchableOpacity } from "react-native";
+import { View, Text, ScrollView, TouchableOpacity, Alert } from "react-native";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { Formik } from "formik";
 import * as Yup from "yup";
@@ -7,8 +7,13 @@ import CustomInput from "../../../shared/components/InputField";
 import { styles } from "./CreateSongStyles";
 import CustomButton from "../../../shared/components/Button";
 import CustomDropdown from "../../../shared/components/CustomDropdown";
-import { sendBirthData } from "../../../shared/api/astroApi";
+// import { sendBirthData } from "../../../shared/api/astroApi";
 import ZodiacLoader from "../../../shared/components/loader";
+// import { getFunctions, httpsCallable } from "firebase/functions";
+// import { getApp } from "firebase/app";
+import { auth } from "../../../../firebase";
+import { functions } from "../../../../firebase";
+import { httpsCallable } from "@firebase/functions";
 
 function CreateSongScreen() {
   const [showDatePicker, setShowDatePicker] = useState(false);
@@ -65,46 +70,42 @@ function CreateSongScreen() {
   });
 
   const handleSubmit = async (values) => {
-    setLoading(true);
+    // const functions = getFunctions(getApp());
+    const generateSong = httpsCallable(functions, "generateSong");
 
-    try {
-      const { name, dateTimeOfBirth } = values;
-
-      const date = dateTimeOfBirth.toISOString().split("T")[0];
-      const time = dateTimeOfBirth.toTimeString().split(" ")[0];
-
-      // TODO: заменить на реальные координаты города
-      const lat = 55.751244;
-      const lon = 37.618423;
-
-      console.log("📨 Подготовленные данные для отправки:", {
-        name,
-        date,
-        time,
-        lat,
-        lon,
-      });
-
-      const natalChart = await sendBirthData({
-        name,
-        date,
-        time,
-        lat,
-        lon,
-      });
-
-      if (natalChart) {
-        console.log("🧠 Натальная карта получена:", natalChart);
-      } else {
-        console.warn("⚠️ Не удалось получить натальную карту.");
-      }
-
-      console.log("📝 Все значения формы:", values);
-    } catch (error) {
-      console.error("❌ Ошибка при отправке данных:", error);
+    if (!auth.currentUser) {
+      Alert.alert("Ошибка", "Пользователь не залогинен");
+      return;
+    } else {
+      console.log(auth.currentUser);
     }
 
-    setLoading(false);
+    // Преобразуем значения в финальный формат, если нужно
+    const payload = {
+      recipient: values.recipient, // "self" | "family" | "friend"
+      familyMember: values.recipient === "family" ? values.familyMember : null,
+      name: values.name,
+      dateTimeOfBirth: values.dateTimeOfBirth.toISOString(),
+      gender: values.gender,
+      height: Number(values.height),
+      weight: Number(values.weight),
+      cityOfBirth: values.cityOfBirth,
+      description: values.description,
+      zodiacSign: values.zodiacSign,
+    };
+    console.log(payload);
+    try {
+      setLoading(true);
+      const result = await generateSong(payload);
+      console.log("Результат генерации:", result.data);
+      // здесь можешь добавить логику перехода на экран или отображения результата
+      return result.data;
+    } catch (e) {
+      console.error("Ошибка генерации:", e.message);
+      // возможно, тут стоит показать пользователю уведомление
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -357,7 +358,7 @@ function CreateSongScreen() {
                       );
                       setFieldValue(
                         "dateTimeOfBirth",
-                        new Date("835-03-30T12:00:00")
+                        new Date("1835-03-30T12:00:00")
                       );
                     }}
                   >
