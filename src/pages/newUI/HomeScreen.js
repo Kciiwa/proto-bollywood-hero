@@ -11,7 +11,25 @@ import {
 import Icon from "react-native-vector-icons/Feather";
 import Ionicons from "react-native-vector-icons/Ionicons";
 
+import { ref, onValue, set } from "firebase/database";
+import { db } from "../../../firebase";
+
 const HomeScreen = ({ navigation }) => {
+  const dbRef = ref(db, "songs");
+
+  const read = () => {
+    onValue(dbRef, (snapshot) => {
+      const data = snapshot.val();
+      console.log(data);
+    });
+  };
+
+  const post = () => {
+    set(ref(db, "songs/song123"), {
+      title: "My song",
+      lyrics: "Some lyrics here...",
+    });
+  };
   return (
     <ScrollView contentContainerStyle={styles.container}>
       <View style={styles.heroSection}>
@@ -39,6 +57,13 @@ const HomeScreen = ({ navigation }) => {
               style={styles.buttonIcon}
             />
             <Text style={styles.buttonText}>Create Your Song</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity style={styles.button} onPress={read}>
+            <Text style={styles.buttonText}>Чтение с бд</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.button} onPress={post}>
+            <Text style={styles.buttonText}>Запись в бд</Text>
           </TouchableOpacity>
         </View>
       </View>
