@@ -25,7 +25,7 @@ const HomeScreen = ({ navigation }) => {
   };
 
   const post = () => {
-    set(ref(db, "songs/song123"), {
+    set(ref(db, "songs/hvgnjj"), {
       title: "My song",
       lyrics: "Some lyrics here...",
     });
