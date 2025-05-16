@@ -16,8 +16,18 @@
       "supportsTablet": true,
       "bundleIdentifier": "com.kciwa.protobollywoodhero",
       "infoPlist": {
-        "ITSAppUsesNonExemptEncryption": false
+  "NSAppTransportSecurity": {
+    "NSExceptionDomains": {
+      "firebaseio.com": {
+        "NSIncludesSubdomains": true,
+        "NSExceptionAllowsInsecureHTTPLoads": false,
+        "NSExceptionRequiresForwardSecrecy": true,
+        "NSAllowsArbitraryLoads": false
       }
+    }
+  },
+  "ITSAppUsesNonExemptEncryption": false
+}
     },
     "android": {
       "adaptiveIcon": {
