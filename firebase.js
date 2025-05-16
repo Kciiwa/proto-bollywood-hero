@@ -19,6 +19,7 @@ import { initializeApp } from "firebase/app";
 import { initializeAuth, getReactNativePersistence } from "firebase/auth";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { getDatabase } from "firebase/database";
+import { getFunctions } from "firebase/functions";
 
 const firebaseConfig = {
   apiKey: "AIzaSyDSuv249JiF_3Laimsojok3F8JOkM95fIQ",
@@ -31,10 +32,11 @@ const firebaseConfig = {
 };
 
 // Инициализация Firebase
-const app = initializeApp(firebaseConfig);
+export const app = initializeApp(firebaseConfig);
 
 // Настройка Auth с сохранением сессии
 export const auth = initializeAuth(app, {
   persistence: getReactNativePersistence(AsyncStorage),
 });
 export const db = getDatabase(app);
+export const functions = getFunctions(app);
